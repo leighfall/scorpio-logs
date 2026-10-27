@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "vue.volar",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "supabase.vscode-supabase-extension",
+    "ms-azuretools.vscode-docker",
+    "ms-ossdata.vscode-pgsql",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

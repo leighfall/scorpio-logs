@@ -1,0 +1,45 @@
+{
+  "name": "scorpio-logs",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "db:types": "supabase gen types typescript --local > types/database.ts",
+    "db:reset": "supabase db reset && pnpm db:types"
+  },
+  "dependencies": {
+    "@nuxt/fonts": "^0.14.0",
+    "@nuxt/icon": "^2.5.1",
+    "@supabase/supabase-js": "^2.117.3",
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.43",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "@iconify-json/ph": "^1.2.2",
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "^4.3.2",
+    "@playwright/test": "^1.63.0",
+    "@testing-library/vue": "^8.1.0",
+    "@types/node": "^26.6.3",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^10.11.0",
+    "happy-dom": "^20.14.5",
+    "prettier": "^3.9.9",
+    "sass": "^1.105.0",
+    "supabase": "^2.118.0",
+    "typescript": "^6.0.0",
+    "vitest": "^5.0.2"
+  }
+}

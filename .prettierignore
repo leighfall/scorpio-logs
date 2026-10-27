@@ -1,0 +1,10 @@
+.nuxt
+.output
+node_modules
+dist
+.claude
+.docs
+supabase
+pnpm-lock.yaml
+types/database.ts
+*.md
