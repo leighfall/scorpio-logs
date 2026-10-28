@@ -81,6 +81,12 @@ Full spec: [specs/features/fight-page.md](../specs/features/fight-page.md).
   - It is **learned automatically** from every parsed fight: `castTrackId` gives cast → effect, and the player's gear plus the set's proc effects explain set sources.
   - Learned entries are suggestions until the group confirms them.
 
+### What-if planning (later; not designed yet)
+- Take a real fight and play out roster changes: "what if the werewolf, who brings a group damage buff but parses lower, were swapped for a regular DD with higher DPS?"
+- The question we care about is the **break-even**: how much DPS a replacement must do to beat the group total with the buff-bringer.
+- Basic shape: remove the buff from everyone else's damage (scaled by its uptime), remove the buff-bringer's own damage, add the replacement's. The break-even is where the two totals match.
+- ESO's damage maths isn't a simple multiply (buffs stack in shared buckets), so the real formulas come from a friend of the group who has already written break-even functions for many scenarios. Integrating them is the plan, not re-deriving them.
+
 ### Visual style
 Approved 2026-10-27 from the "Codex" direction on the [design canvas](https://claude.ai/artifact/85QoD82AytwUuH9smMmU1T). Tokens live in `app/assets/styles/_tokens.scss` and `main.scss`.
 - An ESO-inspired dark theme:
@@ -171,5 +177,7 @@ Task-level breakdown: [tasks.md](tasks.md).
 ## Open items
 - How several group members' buff uptimes combine into one checklist number (debuffs are settled: per boss, adds excluded).
 - The threshold for flagging "doubled up" (the mockup uses 10% of the fight).
+- Whether `FightModel` needs damage over time (e.g. per-second buckets per player) for what-if planning. Decide before the M0.14 payload size check.
+- What form the friend's break-even functions are in (language, inputs), and whether they can live in `shared/`.
 - What v1 ships with: the milestone cut-off.
 - How to tell slotted CP and mundus apart from passives in `PLAYER_INFO`'s long-term effect list.
