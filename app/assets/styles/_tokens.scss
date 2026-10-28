@@ -1,13 +1,22 @@
 $charcoal: #121418;
 $navy: #171d29;
 $slate: #222a38;
+$slate-light: #2e3747;
 $parchment: #ece4d4;
+$stone: #b8b1a4;
 $ash: #9a9488;
+$steel: #5d626c;
 $gold: #c9a45c;
 $gold-dim: #8a6f3e;
+$blue: #6b9ad6;
 $green: #6fbf73;
 $amber: #e0a43a;
 $red: #d9534f;
+
+// Lighter tints for status text on dark surfaces (base colours fail contrast as text)
+$green-light: #8fd493;
+$amber-light: #efbd62;
+$red-light: #f19a96;
 
 $phone-max: 600px;
 $laptop-min: 992px;

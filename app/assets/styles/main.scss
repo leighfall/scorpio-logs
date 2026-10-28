@@ -4,22 +4,40 @@
   --color-bg: #{$charcoal};
   --color-surface: #{$navy};
   --color-surface-raised: #{$slate};
-  --color-border: rgb(255 255 255 / 8%);
-  --color-border-muted: rgb(255 255 255 / 15%);
+  --color-border: #{$slate};
+  --color-border-muted: #{$slate-light};
   --color-border-strong: rgb(255 255 255 / 40%);
+  --color-scrim: rgb(8 10 14 / 60%);
   --color-text: #{$parchment};
+  --color-text-secondary: #{$stone};
   --color-text-muted: #{$ash};
   --color-primary: #{$gold};
   --color-primary-dim: #{$gold-dim};
   --color-on-primary: #{$charcoal};
+
   --color-good: #{$green};
+  --color-good-text: #{$green-light};
+  --color-good-bg: rgb(111 191 115 / 14%);
   --color-warn: #{$amber};
+  --color-warn-text: #{$amber-light};
+  --color-warn-bg: rgb(224 164 58 / 16%);
   --color-bad: #{$red};
+  --color-bad-text: #{$red-light};
+  --color-bad-bg: rgb(217 83 79 / 18%);
+
+  --color-role-tank: #{$blue};
+  --color-role-healer: #{$green};
+  --color-role-dd: #{$gold};
+
+  --color-uptime-added: #{$gold};
+  --color-uptime-overlap: #{$steel};
+  --color-track: #{$slate};
 
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Cinzel', Georgia, serif;
-  --radius: 0.75rem;
-  --radius-button: 0.45rem;
+  --radius: 0.5rem;
+  --radius-button: 0.375rem;
+  --radius-chip: 0.25rem;
 
   --duration-fast: 150ms;
   --duration-base: 250ms;
@@ -39,11 +57,21 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
 }
 
 h1,
-h2,
-h3 {
+h2 {
   font-family: var(--font-display);
+  font-weight: 600;
+}
+
+h1 {
+  color: var(--color-text);
+}
+
+h2 {
   color: var(--color-primary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }

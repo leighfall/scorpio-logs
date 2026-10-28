@@ -17,8 +17,8 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done
   *Done when:* the types compile and the field list has been reviewed against the plan.
 
 - [ ] **M0.3 Coverage helpers**
-  In `shared/utils/`: `unionIntervals`, `uptime`, and `mergedEffectsOnTarget`, which groups effects by name and splits them out by source.
-  *Done when:* unit tests pass. Two overlapping sources come to ≤ 100%, the per-source split is correct, and an empty input gives 0%.
+  In `shared/utils/`: `unionIntervals`, `uptime`, and `mergedEffectsOnTarget`, which groups effects by name and splits them out by source. Each source reports the uptime it added and the time it overlapped another source on the same target (including the same player from two sources).
+  *Done when:* unit tests pass. Two overlapping sources come to ≤ 100%, the per-source split is correct, each source's added + overlapped time equals its own uptime, and an empty input gives 0%.
 
 - [x] **M0.4 Sample logs**
   Five full-fight extracts from one Dreadsail session in `.docs/sample-logs/`: a trash pull, Bow Breaker, Lylanar & Turlassil, a Reef Guardian wipe, and Taleria with `END_TRIAL`. Each one is a standalone, valid log under 50 MB; the README there records the source and how they were cut. Tiny hand-cut slices for unit tests go in `tests/fixtures/` as the tests need them.
@@ -66,7 +66,7 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done
 ## M1 – Local log → shareable fight page
 
 - [~] **M1.1 Nuxt app shell**
-  Design tokens (dark theme, gold accent, Cinzel plus Inter) and the base layout. A placeholder version was created during M0.1; the fonts and palette still need sign-off.
+  Design tokens (dark theme, gold accent, Cinzel plus Inter) and the base layout. Fonts and palette were approved on 2026-10-27 ("Codex" direction) and the tokens are in place; the base layout with the sidebar is still to do.
   *Done when:* the app runs locally and shows a styled placeholder page, and the tokens are approved.
 
 - [ ] **M1.2 Supabase project and schema**
@@ -93,20 +93,21 @@ Status: `[ ]` todo · `[~]` in progress · `[x]` done
   Server route: on first request, fetch the icon from the rpglogs CDN, store it in Supabase storage, and serve it from there. Unknown icons get a fallback.
   *Done when:* each icon is only fetched from the CDN once.
 
-- [ ] **M1.8 Fight page: header + DPS strip**
-  *Done when:* it shows the boss, kill or wipe, duration, group DPS, deaths, score, and players ranked by DPS.
+- [ ] **M1.8 Fight page: sidebar + header**
+  Group navigation and this session's pulls in the sidebar; the header has no per-player DPS strip.
+  *Done when:* it shows the boss, kill or wipe, duration, group DPS, deaths and score, and the sidebar stacks above the content on a phone.
 
-- [ ] **M1.9 Fight page: player card (stacked strip)**
-  Name and DPS/HPS, both bars, set chips and contribution pills. The expanded view adds the gear paper-doll, CP and mundus.
-  *Done when:* the cards render for all 12 players and the tooltips work.
+- [ ] **M1.9 Fight page: player card (stacked strip) + gear flyout**
+  @account first, then character · class. DDs show DPS, tanks DPS and HPS, healers HPS then DPS. Both bars, set chips and contribution pills. "Gear, CP & mundus" opens the gear flyout from the right.
+  *Done when:* the cards render for all 12 players, the tooltips work, and the gear flyout opens and closes without leaving the page.
 
-- [ ] **M1.10 Merged effects UI**
-  Rows grouped by name, an expandable source dropdown, and the global merged/split toggle.
-  *Done when:* Major Vulnerability expands to show each source with its player.
+- [ ] **M1.10 Checklist coverage + sources flyout**
+  Buffs and Debuffs panels with a timeline row per effect, a Both / each-boss toggle for multi-boss fights (adds excluded), and a sources flyout that lists every source with its overlap greyed out.
+  *Done when:* on Lylanar & Turlassil the toggle switches the debuff timelines between bosses, and Major Breach's flyout shows each source with its player and how much it overlapped.
 
 - [ ] **M1.11 Default checklist + MISSING bar**
-  A seeded default checklist (target, floor, scope) with red/amber/green grading.
-  *Done when:* the Dreadsail fight shows a correct MISSING bar. Depends on the open question of whose uptime counts; a placeholder rule is used until it's decided.
+  A seeded default checklist (target, floor, scope) with red/amber/green grading. The MISSING bar is derived from the coverage data and follows the boss toggle.
+  *Done when:* the Dreadsail fight shows a correct MISSING bar. How buff uptime combines across members is still open; a placeholder rule is used until it's decided.
 
 - [ ] **M1.12 Roster matching + Unassigned lane**
   Roles come from the roster with the most @account overlap. Everyone else goes to the Unassigned lane.

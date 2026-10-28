@@ -37,23 +37,32 @@ It also has an **editable roster builder** that compares a planned roster with w
 - **Ready for logins later.** Every row has `owner_id` (null for now) and a group-membership table exists from the start. Adding Discord OAuth later means switching on Supabase auth and its row-level security, with no schema rework.
 
 ### Fight page (main view: role-grouped roster)
-1. **Header:** trial, boss, kill or wipe, duration, group DPS, deaths, and score where there is one.
-2. **MISSING bar:** checklist items below their floor or never applied shown red, items under target shown amber.
-3. **DPS strip:** a slim ranked bar of every player.
+Full spec: [specs/features/fight-page.md](../specs/features/fight-page.md).
+
+0. **Sidebar:** group navigation (Fights, Rosters, Checklists, Provides map) and this session's pulls. It stacks above the content on phones.
+1. **Header:** trial, boss, kill or wipe, duration, group DPS, deaths, and score where there is one. No per-player DPS strip.
+2. **MISSING bar:** checklist items below their floor or never applied shown red, items under target shown amber. It is derived from the coverage data, so it follows the boss toggle.
+3. **Checklist coverage:** separate **Buffs** and **Debuffs** panels. Each effect is a row with a timeline of when it was up, its merged uptime and its target.
+   - Buffs are measured on the group members in the item's scope.
+   - Debuffs are measured on **bosses only**; adds are excluded.
+   - Multi-boss fights (e.g. Lylanar & Turlassil) get a **Both / each boss** toggle on the Debuffs panel. "Both" shows one timeline lane per boss.
+   - Each row shows how many sources it had, and flags **doubling up** (two sources up at the same time on the same target).
 4. **Role columns:** Tanks / Healers / DDs, plus an Unassigned lane. **Roles come only from the roster.**
    - The fight automatically picks the group's roster with the most @account overlap, and you can switch.
    - If none match, the page offers "Create roster from this fight", with suggested roles to confirm.
-5. **Player card (stacked strip):**
-   1. name, @account and DPS/HPS with a small bar
-   2. front and back bars (6 icons each)
+5. **Player card (stacked strip):** players are identified by **@account**; character name and class are secondary.
+   1. @account, character · class, and the role's numbers: DDs show DPS; tanks show DPS and HPS; healers show HPS first, then DPS. A small bar compares the player with the top of their role.
+   2. front and back bars (6 icons each), always visible, so you can check at a glance that someone is covering a skill
    3. set chips
    4. contribution pills: what that player provided, with uptime and a ⚠ under target
    5. planned-vs-actual differences highlighted
-6. **Expanded card:** the full gear paper-doll (slot, set, trait, quality, enchant), plus CP and mundus.
+6. **Flyouts, not page changes:** detail opens in a drawer from the right, one at a time, closed by its close button or by clicking outside it.
+   - **Gear flyout** (from a card): set piece counts, the full gear list (slot, set, trait, quality, enchant), slotted CP and mundus.
+   - **Sources flyout** (from a coverage row): the merged timeline, then **every** source (ability, player, skill/set/enchant) with its own timeline. Uptime a source added is drawn in gold, and time it overlapped another source is greyed out. Sources that added nothing are still listed.
 7. **Merged effects:** effects that share a name, such as Major Vulnerability, form one row.
    - The row's uptime is the **union** of all intervals.
-   - A dropdown shows each source: ability + player, linked through `castTrackId` back to its `BEGIN_CAST`.
-   - A global merged/split toggle.
+   - Overlap is counted per target. It includes one player applying the same effect from two sources (e.g. a skill and a set).
+   - Each source links through `castTrackId` back to its `BEGIN_CAST`.
 
 ### Checklist
 - One default list per trial, overridable per boss.
@@ -61,7 +70,7 @@ It also has an **editable roster builder** that compares a planned roster with w
   - an effect name, with its ability IDs grouped
   - a **target** and a **floor**: green at or above target, amber in between, red below the floor or absent
   - a **scope** (boss / everyone / DDs / tanks / healers)
-- **Whose uptime counts is still OPEN.** The fight data stores raw intervals for each target, so the scope can be decided or changed later without re-parsing.
+- **Whose uptime counts:** debuffs count on bosses only (adds excluded), per boss. Buffs count on the group members in the item's scope; exactly how several members' uptimes combine is still **OPEN**. The fight data stores raw intervals for each target, so this can change later without re-parsing.
 
 ### Roster builder
 - **Trial template:** defaults to 2 tanks / 2 healers / 8 DDs (the counts can be edited), plus a bench and variants per boss.
@@ -73,10 +82,15 @@ It also has an **editable roster builder** that compares a planned roster with w
   - Learned entries are suggestions until the group confirms them.
 
 ### Visual style
+Approved 2026-10-27 from the "Codex" direction on the [design canvas](https://claude.ai/artifact/85QoD82AytwUuH9smMmU1T). Tokens live in `app/assets/styles/_tokens.scss` and `main.scss`.
 - An ESO-inspired dark theme:
   - charcoal and navy backgrounds with muted gold accents
-  - a serif display font for headings (e.g. Cinzel) and a clean sans body font
+  - **Cinzel** for display: page titles and upper-case, letter-spaced section headings
+  - **Inter** for everything else, with tabular figures for numbers
   - icons as the main source of colour
+- Status: green at target, amber under target, red below floor. Fills use the base colours; text on dark surfaces uses their lighter tints for contrast.
+- Roles: tanks blue, healers green, DDs gold.
+- Cards: navy, 1px slate border, 8px radius, no shadows.
 - Readable at a glance. This should not feel like a spreadsheet.
 
 ## Data model (Supabase)
@@ -155,6 +169,7 @@ Task-level breakdown: [tasks.md](tasks.md).
 - **Sharing:** the view link works signed out, and editing fails without the edit key.
 
 ## Open items
-- Who checklist uptime should count (the scope semantics).
+- How several group members' buff uptimes combine into one checklist number (debuffs are settled: per boss, adds excluded).
+- The threshold for flagging "doubled up" (the mockup uses 10% of the fight).
 - What v1 ships with: the milestone cut-off.
 - How to tell slotted CP and mundus apart from passives in `PLAYER_INFO`'s long-term effect list.
